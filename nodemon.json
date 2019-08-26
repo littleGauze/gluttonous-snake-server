@@ -1,0 +1,16 @@
+{
+  "verbose": true,
+  "ignore": [
+    ".git",
+    "test/*",
+    "node_modules/*"
+  ],
+  "watch": [
+    "src/"
+  ],
+  "events": {
+    "start": "tsc --watch"
+  },
+  "ext": "js,ts",
+  "delay": "2000"
+}
