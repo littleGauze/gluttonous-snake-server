@@ -9,7 +9,7 @@
     "src/"
   ],
   "events": {
-    "start": "tsc --watch"
+
   },
   "ext": "js,ts",
   "delay": "2000"
