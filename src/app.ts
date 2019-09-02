@@ -1,9 +1,10 @@
+import SocketIo from './socket'
+import Game from './game'
+
 import Koa = require('koa')
 import Router = require('koa-router')
 import http = require('http')
 import cors = require('koa-cors')
-import SocketIo from './socket'
-import Game from './game'
 
 const app = new Koa()
 const router = new Router()

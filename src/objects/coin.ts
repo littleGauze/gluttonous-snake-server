@@ -11,8 +11,10 @@ export default class Coin implements GameObject {
   public index: number
   public value: number
   public position: Position
+  public clazz: string
 
   public constructor(value: number) {
+    this.clazz = 'Coin'
     this.value = value
     this.index = Coin.coinsIndex
     ++Coin.coinsIndex
@@ -33,5 +35,13 @@ export default class Coin implements GameObject {
     Board.removeObjectAt(this.position)
     delete Coin.instances[this.index]
     --Coin.coinsActive
+  }
+
+  public toJSON(): object {
+    return {
+      clazz: this.clazz,
+      index: this.index,
+      value: this.value
+    }
   }
 }

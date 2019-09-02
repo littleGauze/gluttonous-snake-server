@@ -1,8 +1,8 @@
-import { Speed, Position } from '../types/index'
+import { Speed, Position, GameObject } from '../types/index'
 import Coin from './coin'
 import Snake from './snake'
 
-export default class SpeedCoin {
+export default class SpeedCoin implements GameObject {
   public static colors: string[] = ['#3366FF', '#FF1400']
   public static instances: { [index: number]: Coin } = {}
   public static itemsIndex: number = 0
@@ -12,8 +12,10 @@ export default class SpeedCoin {
   public color: string
   public speed: Speed
   public position: Position
+  public clazz: string
 
   public constructor(speed: Speed) {
+    this.clazz = 'SpeedCoin'
     this.speed = speed
     this.color = SpeedCoin.colors[speed]
     this.index = SpeedCoin.itemsIndex
@@ -29,5 +31,14 @@ export default class SpeedCoin {
   public destroy(): void {
     delete SpeedCoin.instances[this.index]
     --SpeedCoin.itemsActive
+  }
+
+  public toJSON(): object {
+    return {
+      clazz: this.clazz,
+      index: this.index,
+      color: this.color,
+      speed: this.speed
+    }
   }
 }

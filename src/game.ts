@@ -1,4 +1,4 @@
-import { ClockTick, Timer, Direction, Speed, Drawable } from './types/index'
+import { ClockTick, Timer, Direction, Speed, Position } from './types/index'
 import { Coin, Snake, SpeedCoin } from './objects/index'
 import { Board, Controls } from './ux/index'
 
@@ -6,22 +6,22 @@ enum GameDifficulty { EASY = 300, MEDIUM = 150, DIFFICULT = 50 }
 
 export default class Game {
   public static clock: Timer
-  public static player: Snake
+  public static players: Array<Snake> = []
   public static hiScore: number = 0
   public static isRunning: boolean = false
   public static coinCounter = 0
-  public static dataCallback: Function
+  public static syncChannel: any
 
-  public static init(dataCallback: Function): void {
-    Game.dataCallback = dataCallback
-    Game.ready(Game.dataCallback)
+  public static init(): void {
+    Game.ready()
   }
 
-  public static ready(dataCallback: Function): void {
+  public static ready(): void {
     Board.init()
 
-    Game.player = new Snake({ X: 0, Y: 0 })
-    Game.player.direction = Direction.RIGHT
+    const dataCallback = throttle((data: any) => {
+      Game.syncChannel && Game.syncChannel.emit('turn', { data })
+    })
     Game.clock = new Timer(GameDifficulty.DIFFICULT, 0, Game.onClockTick(dataCallback))
   }
 
@@ -50,13 +50,28 @@ export default class Game {
   public static reset(): void {
     Game.clock && Game.clock.stop() // eslint-disable-line
     Game.isRunning = false
-    Game.ready(Game.dataCallback)
+    Game.ready()
+  }
+
+  public static addPlayer(sync: any, socket: any): void {
+    if (!Game.syncChannel) {
+      Game.syncChannel = sync
+      Game.init()
+      Game.start()
+    }
+    const player = new Snake(new Position(0, 0))
+    player.direction = Direction.RIGHT
+    // if (!Game.players.find((p) => p.name === player.name)) {
+    Game.players.push(player)
+    // }
   }
 
   public static onClockTick(callback: Function): () => void {
-    return () => {
-      Controls.processInput()
-      Game.player.processTurn()
+    return (): void => {
+      Game.players.forEach((p) => {
+        // Controls.processInput(p)
+        p.processTurn()
+      })
 
       if (Game.clock.tick === ClockTick.EVEN) {
         ++Game.coinCounter
@@ -82,6 +97,19 @@ export default class Game {
       }
 
       callback(Board.getData())
+    }
+  }
+}
+
+// sync very 66ms, 15/second
+function throttle(handle: Function): (data: any) => void {
+  const interval = 2000
+  let lastSyncAt = Date.now()
+  return (data: any): void => {
+    const now = Date.now()
+    if (now - lastSyncAt > interval) {
+      handle(data)
+      lastSyncAt = now
     }
   }
 }

@@ -34,7 +34,9 @@ var Snake = /** @class */ (function (_super) {
         _this.maxLength = Snake.defaultLength;
         _this.segments[0] = _this;
         _this.isAlive = true;
+        _this.clazz = 'Snake';
         _this.name = 'nealli';
+        _this.id = '1234';
         index_1.Board.placeObject(_this, position);
         return _this;
     }
@@ -163,6 +165,19 @@ var Snake = /** @class */ (function (_super) {
         }
         this.segments = [this];
         this.maxLength = Snake.defaultLength;
+    };
+    Snake.prototype.toJSON = function () {
+        return {
+            id: this.id,
+            clazz: this.clazz,
+            name: this.name,
+            colorIndex: this.colorIndex,
+            maxLength: this.maxLength,
+            isAlive: this.isAlive,
+            speed: this.speed,
+            direction: this.direction,
+            segments: this.segments.slice(1).map(function (seg) { return seg.toJSON(); })
+        };
     };
     Snake.defaultLength = 3;
     return Snake;

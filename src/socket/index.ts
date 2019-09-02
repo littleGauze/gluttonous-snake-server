@@ -15,11 +15,7 @@ export default (server: any, Game: any): void => {
   })
 
   chat(io)
-  sync(io, (sync: any) => {
-    Game.init((data: Drawable[][]) => {
-      console.log(data)
-      // sync.emit('turn', { data })
-    })
-    Game.start()
+  sync(io, (syncChannel: any, socket: any) => {
+    Game.addPlayer(syncChannel, socket)
   })
 }

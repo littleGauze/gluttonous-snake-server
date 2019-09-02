@@ -3,6 +3,7 @@ import Snake from '../objects/snake'
 
 export interface Drawable {
   position: Position
+  toJSON: () => object
 }
 
 export interface PlayerObject extends Drawable {

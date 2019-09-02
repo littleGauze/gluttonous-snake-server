@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var SnakeSegment = /** @class */ (function () {
     function SnakeSegment(position) {
         this.colorIndex = -1;
+        this.clazz = 'SnakeSegment';
         this.position = position;
     }
     SnakeSegment.prototype.getColor = function () {
@@ -12,6 +13,13 @@ var SnakeSegment = /** @class */ (function () {
     };
     SnakeSegment.prototype.handleCollision = function (snake) {
         snake.die();
+    };
+    SnakeSegment.prototype.toJSON = function () {
+        return {
+            clazz: this.clazz,
+            colorIndex: this.colorIndex,
+            position: this.position.toJSON()
+        };
     };
     SnakeSegment.colors = [
         '#FF0000', '#FF9966',

@@ -13,12 +13,8 @@ exports.default = (function (server, Game) {
         socket.emit('msg', 'welcome join us!');
     });
     chat_1.default(io);
-    sync_1.default(io, function (sync) {
-        Game.init(function (data) {
-            console.log(data[0]);
-            // sync.emit('turn', { data })
-        });
-        Game.start();
+    sync_1.default(io, function (syncChannel, socket) {
+        Game.addPlayer(syncChannel, socket);
     });
 });
 //# sourceMappingURL=index.js.map

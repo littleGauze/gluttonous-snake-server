@@ -3,6 +3,6 @@ export default (io: any, callback: Function): void => {
 
   sync.on('connect', (socket: any) => {
     console.log('on sync connected ')
-    callback(sync)
+    callback(sync, socket)
   })
 }

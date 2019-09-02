@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var SpeedCoin = /** @class */ (function () {
     function SpeedCoin(speed) {
+        this.clazz = 'SpeedCoin';
         this.speed = speed;
         this.color = SpeedCoin.colors[speed];
         this.index = SpeedCoin.itemsIndex;
@@ -15,6 +16,14 @@ var SpeedCoin = /** @class */ (function () {
     SpeedCoin.prototype.destroy = function () {
         delete SpeedCoin.instances[this.index];
         --SpeedCoin.itemsActive;
+    };
+    SpeedCoin.prototype.toJSON = function () {
+        return {
+            clazz: this.clazz,
+            index: this.index,
+            color: this.color,
+            speed: this.speed
+        };
     };
     SpeedCoin.colors = ['#3366FF', '#FF1400'];
     SpeedCoin.instances = {};

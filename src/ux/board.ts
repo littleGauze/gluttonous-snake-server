@@ -58,6 +58,18 @@ export default class Board {
   }
 
   public static getData(): Drawable[][] {
-    return Board.grid
+    const data: any = {}
+    for (let cx = 0; cx < Board.width; cx++) {
+      for (let cy = 0; cy < Board.height; cy++) {
+        let obj: any = Board.grid[cx][cy]
+        if (obj) {
+          obj = obj.toJSON()
+          if (obj.clazz !== 'SnakeSegment') {
+            data[`${cx}-${cy}`] = obj
+          }
+        }
+      }
+    }
+    return data
   }
 }

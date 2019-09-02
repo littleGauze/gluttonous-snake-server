@@ -27,7 +27,9 @@ export default class Snake extends SnakeSegment implements PlayerObject {
   public points: number = 0
   public lives: number = 999
 
+  public id: string
   public name: string
+  public clazz: string
   public segments: SnakeSegment[] = []
   public maxLength: number = Snake.defaultLength
 
@@ -35,7 +37,9 @@ export default class Snake extends SnakeSegment implements PlayerObject {
     super(position)
     this.segments[0] = this
     this.isAlive = true
+    this.clazz = 'Snake'
     this.name = 'nealli'
+    this.id = '1234'
 
     Board.placeObject(this, position)
   }
@@ -179,5 +183,19 @@ export default class Snake extends SnakeSegment implements PlayerObject {
 
     this.segments = [this]
     this.maxLength = Snake.defaultLength
+  }
+
+  public toJSON(): object {
+    return {
+      id: this.id,
+      clazz: this.clazz,
+      name: this.name,
+      colorIndex: this.colorIndex,
+      maxLength: this.maxLength,
+      isAlive: this.isAlive,
+      speed: this.speed,
+      direction: this.direction,
+      segments: this.segments.slice(1).map((seg) => seg.toJSON())
+    }
   }
 }

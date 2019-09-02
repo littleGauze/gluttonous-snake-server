@@ -12,14 +12,14 @@ var GameDifficulty;
 var Game = /** @class */ (function () {
     function Game() {
     }
-    Game.init = function (dataCallback) {
-        Game.dataCallback = dataCallback;
-        Game.ready(Game.dataCallback);
+    Game.init = function () {
+        Game.ready();
     };
-    Game.ready = function (dataCallback) {
+    Game.ready = function () {
         index_3.Board.init();
-        Game.player = new index_2.Snake({ X: 0, Y: 0 });
-        Game.player.direction = index_1.Direction.RIGHT;
+        var dataCallback = throttle(function (data) {
+            Game.syncChannel && Game.syncChannel.emit('turn', { data: data });
+        });
         Game.clock = new index_1.Timer(GameDifficulty.DIFFICULT, 0, Game.onClockTick(dataCallback));
     };
     Game.start = function () {
@@ -44,12 +44,26 @@ var Game = /** @class */ (function () {
     Game.reset = function () {
         Game.clock && Game.clock.stop(); // eslint-disable-line
         Game.isRunning = false;
-        Game.ready(Game.dataCallback);
+        Game.ready();
+    };
+    Game.addPlayer = function (sync, socket) {
+        if (!Game.syncChannel) {
+            Game.syncChannel = sync;
+            Game.init();
+            Game.start();
+        }
+        var player = new index_2.Snake(new index_1.Position(0, 0));
+        player.direction = index_1.Direction.RIGHT;
+        // if (!Game.players.find((p) => p.name === player.name)) {
+        Game.players.push(player);
+        // }
     };
     Game.onClockTick = function (callback) {
         return function () {
-            index_3.Controls.processInput();
-            Game.player.processTurn();
+            Game.players.forEach(function (p) {
+                // Controls.processInput(p)
+                p.processTurn();
+            });
             if (Game.clock.tick === index_1.ClockTick.EVEN) {
                 ++Game.coinCounter;
                 if (Game.coinCounter >= 2) {
@@ -76,10 +90,23 @@ var Game = /** @class */ (function () {
             callback(index_3.Board.getData());
         };
     };
+    Game.players = [];
     Game.hiScore = 0;
     Game.isRunning = false;
     Game.coinCounter = 0;
     return Game;
 }());
 exports.default = Game;
+// sync very 66ms, 15/second
+function throttle(handle) {
+    var interval = 2000;
+    var lastSyncAt = Date.now();
+    return function (data) {
+        var now = Date.now();
+        if (now - lastSyncAt > interval) {
+            handle(data);
+            lastSyncAt = now;
+        }
+    };
+}
 //# sourceMappingURL=game.js.map

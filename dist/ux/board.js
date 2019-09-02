@@ -44,7 +44,19 @@ var Board = /** @class */ (function () {
         }
     };
     Board.getData = function () {
-        return Board.grid;
+        var data = {};
+        for (var cx = 0; cx < Board.width; cx++) {
+            for (var cy = 0; cy < Board.height; cy++) {
+                var obj = Board.grid[cx][cy];
+                if (obj) {
+                    obj = obj.toJSON();
+                    if (obj.clazz !== 'SnakeSegment') {
+                        data[cx + "-" + cy] = obj;
+                    }
+                }
+            }
+        }
+        return data;
     };
     Board.bgColor = '#fff';
     Board.gridColor = '#001F5C';

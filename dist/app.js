@@ -1,11 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+var socket_1 = require("./socket");
+var game_1 = require("./game");
 var Koa = require("koa");
 var Router = require("koa-router");
 var http = require("http");
 var cors = require("koa-cors");
-var socket_1 = require("./socket");
-var game_1 = require("./game");
 var app = new Koa();
 var router = new Router();
 var server = http.createServer(app.callback());

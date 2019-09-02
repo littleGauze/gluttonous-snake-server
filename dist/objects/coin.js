@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var index_1 = require("../ux/index");
 var Coin = /** @class */ (function () {
     function Coin(value) {
+        this.clazz = 'Coin';
         this.value = value;
         this.index = Coin.coinsIndex;
         ++Coin.coinsIndex;
@@ -20,6 +21,13 @@ var Coin = /** @class */ (function () {
         index_1.Board.removeObjectAt(this.position);
         delete Coin.instances[this.index];
         --Coin.coinsActive;
+    };
+    Coin.prototype.toJSON = function () {
+        return {
+            clazz: this.clazz,
+            index: this.index,
+            value: this.value
+        };
     };
     Coin.values = [200, 600, 800, 1000, 2000];
     Coin.instances = {};

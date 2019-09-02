@@ -8,6 +8,9 @@ var Position = /** @class */ (function () {
     Position.copy = function (position) {
         return new Position(position.X, position.Y);
     };
+    Position.prototype.toJSON = function () {
+        return { X: this.X, Y: this.Y };
+    };
     return Position;
 }());
 exports.Position = Position;

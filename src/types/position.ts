@@ -10,4 +10,8 @@ export class Position {
   public static copy(position: Position): Position {
     return new Position(position.X, position.Y)
   }
+
+  public toJSON(): { X: number; Y: number } {
+    return { X: this.X, Y: this.Y }
+  }
 }

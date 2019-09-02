@@ -9,10 +9,12 @@ export default class SnakeSegment implements GameObject {
     '#7966FF', '#F366FF'
   ]
 
+  public clazz: string
   public position: Position
   public colorIndex: number = -1
 
   public constructor(position: Position) {
+    this.clazz = 'SnakeSegment'
     this.position = position
   }
 
@@ -24,5 +26,13 @@ export default class SnakeSegment implements GameObject {
 
   public handleCollision(snake: Snake): void {
     snake.die()
+  }
+
+  public toJSON(): object {
+    return {
+      clazz: this.clazz,
+      colorIndex: this.colorIndex,
+      position: this.position.toJSON()
+    }
   }
 }
