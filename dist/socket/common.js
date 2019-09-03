@@ -36,50 +36,26 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 var _this = this;
 Object.defineProperty(exports, "__esModule", { value: true });
-var socket_1 = require("./socket");
-var game_1 = require("./game");
-var Koa = require("koa");
-var Router = require("koa-router");
-var http = require("http");
-var cors = require("koa-cors");
-var session = require("koa-generic-session");
-var sessionStore = require("koa-redis");
-var koaBodyparser = require("koa-bodyparser");
-var config = require("config");
-var app = new Koa();
-var router = new Router();
-var cfg = config.get('redis');
-app.keys = ['koa2', 'socketio', 'koa-session'];
-var sessionOpt = {
-    store: sessionStore({
-        host: cfg.host,
-        port: cfg.port
-    }),
-    key: 'snake'
-};
-app.use(session(sessionOpt));
-app.use(koaBodyparser());
-var server = http.createServer(app.callback());
-socket_1.default(server, { Game: game_1.default, app: app, sessionOpt: sessionOpt });
-app.use(cors({
-    origin: true
-}));
-router.get('/user', function (ctx, next) { return __awaiter(_this, void 0, void 0, function () {
-    return __generator(this, function (_a) {
-        ctx.body = ctx.session.user;
-        return [2 /*return*/];
+exports.default = (function (io) {
+    var common = io.of('/common');
+    common.on('connection', function (socket) {
+        console.log(socket.id + " common connected --- ", socket.handshake);
+        socket.emit('chat', 'welcome join the chat.');
+        socket.on('authentication', function (_a, callback) {
+            var name = _a.name;
+            return __awaiter(_this, void 0, void 0, function () {
+                var user;
+                return __generator(this, function (_b) {
+                    switch (_b.label) {
+                        case 0: return [4 /*yield*/, io.redisStore.setUser(name)];
+                        case 1:
+                            user = _b.sent();
+                            callback(user);
+                            return [2 /*return*/];
+                    }
+                });
+            });
+        });
     });
-}); });
-router.post('/auth', function (ctx, next) { return __awaiter(_this, void 0, void 0, function () {
-    var body;
-    return __generator(this, function (_a) {
-        body = ctx.request.body;
-        ctx.body = body;
-        return [2 /*return*/];
-    });
-}); });
-app.use(router.routes());
-server.listen(3001, function () {
-    console.log('Server running on port 3000');
 });
-//# sourceMappingURL=app.js.map
+//# sourceMappingURL=common.js.map

@@ -1,14 +1,18 @@
 import SocketIo = require('socket.io')
 import adapter = require('socket.io-redis')
+import config = require('config')
+import redisStore from '../libs/redis'
 
-import chat from './chat'
+import common from './common'
 import sync from './sync'
-import { Drawable } from '../types/index'
+import user from './user'
+import auth from '../libs/auth'
 
-export default (server: any, Game: any): void => {
+export default (server: any, { Game, app, sessionOpt }: any): void => {
+  const cfg: any = config.get('redis')
   const redisAdapter = adapter({
-    host: process.env.REDIS_HOST || 'localhost',
-    port: 6379
+    host: cfg.host,
+    port: cfg.port
   })
 
   const io = SocketIo(server, {
@@ -17,14 +21,17 @@ export default (server: any, Game: any): void => {
   })
 
   io.adapter(redisAdapter)
+  redisStore(io, { app, sessionOpt })
 
   io.on('connection', (socket: any): void => {
-    console.log(`${socket.id} connected`)
-    socket.emit('msg', 'welcome join us!')
+    // console.log(`${socket.id} connected --- `, socket.handshake)
   })
 
-  chat(io)
+  common(io)
   sync(io, (syncChannel: any, socket: any) => {
     Game.addPlayer(syncChannel, socket)
   })
+
+  const userChannel = user(io)
+  userChannel.use(auth(io))
 }
