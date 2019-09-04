@@ -50,6 +50,7 @@ var app = new Koa();
 var router = new Router();
 var cfg = config.get('redis');
 app.keys = ['koa2', 'socketio', 'koa-session'];
+console.log('cfg ===> ', cfg);
 var sessionOpt = {
     store: sessionStore({
         host: cfg.host,

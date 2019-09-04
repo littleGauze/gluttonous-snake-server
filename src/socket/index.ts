@@ -18,7 +18,7 @@ export default (server: any, Game: any): void => {
 
   const io = SocketIo(server, {
     transports: ['websocket', 'polling'],
-    origins: ['http://localhost:8080']
+    origins: ['http://localhost:8080', 'https://littlegauze.github.io/', 'http://snake.gauze.life']
   })
 
   // io.adapter(redisAdapter)

@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "tsc && nodemon ./dist/app.js"
+    "dev": "tsc && nodemon ./dist/app.js",
+    "build": "NODE_ENV=production tsc",
+    "start": "NODE_ENV=production node ./dist/app.js"
   },
   "repository": {
     "type": "git",

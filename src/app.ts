@@ -15,7 +15,7 @@ const router = new Router()
 
 const cfg: any = config.get('redis')
 app.keys = ['koa2', 'socketio', 'koa-session']
-
+console.log('cfg ===> ', cfg)
 const sessionOpt = {
   store: sessionStore({
     host: cfg.host,
