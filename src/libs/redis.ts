@@ -29,7 +29,7 @@ export default (io: any, { store, ...opts }: any): StoreApi => {
       const { token, expires } = generateTokenInfo()
       const sid = `${key}${prefix}${token}`
       const user = { name, token, expires }
-      await store.set(sid, user, expires)
+      await store.set(sid, JSON.stringify(user), expires)
       return user
     },
 

@@ -34,35 +34,70 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var _this = this;
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = (function (io) {
-    var common = io.of('/common');
-    common.on('connection', function (socket) {
-        console.log(socket.id + " common connected --- ", socket.handshake);
-        socket.emit('chat', 'hello there...');
-        socket.on('authentication', function (_a, callback) {
-            var name = _a.name;
-            return __awaiter(_this, void 0, void 0, function () {
-                var user;
-                return __generator(this, function (_b) {
-                    switch (_b.label) {
-                        case 0:
-                            console.log('authentication ==== ', name);
-                            return [4 /*yield*/, io.redisStore.setUser(name)];
+var Ioredis = require("ioredis");
+exports.default = (function (cfg) {
+    var redis = new Ioredis({
+        host: cfg.host,
+        port: cfg.port
+    });
+    return {
+        get: function (sid) {
+            return __awaiter(this, void 0, void 0, function () {
+                var res;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0: return [4 /*yield*/, promisify(redis.get.bind(redis))(sid)];
                         case 1:
-                            user = _b.sent();
-                            socket._user = user;
-                            callback(user);
-                            return [2 /*return*/];
+                            res = _a.sent();
+                            return [2 /*return*/, JSON.parse(res)];
                     }
                 });
             });
-        });
-        socket.on('chat', function (msg) {
-            console.log('server got msg ====> ', msg);
-        });
-    });
-    return common;
+        },
+        set: function (sid, session, ttl) {
+            return __awaiter(this, void 0, void 0, function () {
+                var res;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0: return [4 /*yield*/, promisify(redis.set.bind(redis))(sid, session, 'EX', ttl)];
+                        case 1:
+                            res = _a.sent();
+                            return [2 /*return*/, !!res];
+                    }
+                });
+            });
+        },
+        destroy: function (sid) {
+            return __awaiter(this, void 0, void 0, function () {
+                var res;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0: return [4 /*yield*/, promisify(redis.del.bind(redis))(sid)];
+                        case 1:
+                            res = _a.sent();
+                            return [2 /*return*/, !!res];
+                    }
+                });
+            });
+        },
+    };
 });
-//# sourceMappingURL=common.js.map
+function promisify(fn) {
+    return function () {
+        var args = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            args[_i] = arguments[_i];
+        }
+        return (new Promise(function (resolve, reject) {
+            fn.apply(void 0, args.concat([function (err, res) {
+                    if (err) {
+                        reject(err);
+                        return;
+                    }
+                    resolve(res);
+                }]));
+        }));
+    };
+}
+//# sourceMappingURL=store.js.map

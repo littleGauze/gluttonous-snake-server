@@ -77,7 +77,7 @@ exports.default = (function (io, _a) {
                             _a = generateTokenInfo(), token = _a.token, expires = _a.expires;
                             sid = "" + key + prefix + token;
                             user = { name: name, token: token, expires: expires };
-                            return [4 /*yield*/, store.set(sid, user, expires)];
+                            return [4 /*yield*/, store.set(sid, JSON.stringify(user), expires)];
                         case 1:
                             _b.sent();
                             return [2 /*return*/, user];

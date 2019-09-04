@@ -55,12 +55,12 @@ var sessionOpt = {
         host: cfg.host,
         port: cfg.port
     }),
-    key: 'snake'
+    key: 'snake:'
 };
 app.use(session(sessionOpt));
 app.use(koaBodyparser());
 var server = http.createServer(app.callback());
-socket_1.default(server, { Game: game_1.default, app: app, sessionOpt: sessionOpt });
+socket_1.default(server, game_1.default);
 app.use(cors({
     origin: true
 }));

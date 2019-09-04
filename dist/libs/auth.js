@@ -42,12 +42,14 @@ exports.default = (function (io) { return function (socket, next) { return __awa
         switch (_a.label) {
             case 0:
                 token = socket.handshake.query.token;
+                console.log('token ====> ', token, socket.handshake);
                 if (!token) return [3 /*break*/, 2];
                 return [4 /*yield*/, io.redisStore.findUserByToken(token)];
             case 1:
                 user = _a.sent();
+                console.log('get user by token ===> ', user);
                 if (user) {
-                    socket.user = user;
+                    socket._user = user;
                     next();
                     return [2 /*return*/];
                 }

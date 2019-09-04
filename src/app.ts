@@ -21,13 +21,13 @@ const sessionOpt = {
     host: cfg.host,
     port: cfg.port
   }),
-  key: 'snake'
+  key: 'snake:'
 }
 app.use(session(sessionOpt))
 app.use(koaBodyparser())
 
 const server = http.createServer(app.callback())
-SocketIo(server, { Game, app, sessionOpt })
+SocketIo(server, Game)
 
 app.use(cors({
   origin: true

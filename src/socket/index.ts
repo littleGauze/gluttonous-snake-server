@@ -1,14 +1,15 @@
 import SocketIo = require('socket.io')
 import adapter = require('socket.io-redis')
 import config = require('config')
-import redisStore from '../libs/redis'
+import store from '../libs/store'
+import redis from '../libs/redis'
 
 import common from './common'
 import sync from './sync'
-import user from './user'
+import users from './users'
 import auth from '../libs/auth'
 
-export default (server: any, { Game, app, sessionOpt }: any): void => {
+export default (server: any, Game: any): void => {
   const cfg: any = config.get('redis')
   const redisAdapter = adapter({
     host: cfg.host,
@@ -20,18 +21,18 @@ export default (server: any, { Game, app, sessionOpt }: any): void => {
     origins: ['http://localhost:8080']
   })
 
-  io.adapter(redisAdapter)
-  redisStore(io, { app, sessionOpt })
+  // io.adapter(redisAdapter)
+  redis(io, { store: store(cfg) })
 
-  io.on('connection', (socket: any): void => {
-    // console.log(`${socket.id} connected --- `, socket.handshake)
-  })
+  // io.on('connection', (socket: any): void => {
+  //   // console.log(`${socket.id} connected --- `, socket.handshake)
+  // })
 
-  common(io)
+  const commonChannel = common(io)
   sync(io, (syncChannel: any, socket: any) => {
     Game.addPlayer(syncChannel, socket)
   })
 
-  const userChannel = user(io)
-  userChannel.use(auth(io))
+  const usersChannel = users(io, commonChannel)
+  usersChannel.use(auth(io))
 }
