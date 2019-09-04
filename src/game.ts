@@ -1,4 +1,4 @@
-import { ClockTick, Timer, Direction, Speed, Position } from './types/index'
+import { ClockTick, Timer, Direction, Speed, Position, User } from './types/index'
 import { Coin, Snake, SpeedCoin } from './objects/index'
 import { Board, Controls } from './ux/index'
 
@@ -11,6 +11,8 @@ export default class Game {
   public static isRunning: boolean = false
   public static coinCounter = 0
   public static syncChannel: any
+  public static isReady: boolean = false
+  public static readyHooks: any = []
 
   public static init(): void {
     Game.ready()
@@ -23,6 +25,12 @@ export default class Game {
       Game.syncChannel && Game.syncChannel.emit('turn', { data })
     })
     Game.clock = new Timer(GameDifficulty.DIFFICULT, 0, Game.onClockTick(dataCallback))
+    Game.isReady = true
+    Game.onReady()
+  }
+
+  public static onReady(): void {
+    Game.readyHooks.forEach((fn: any) => fn())
   }
 
   public static start(): void {
@@ -53,17 +61,30 @@ export default class Game {
     Game.ready()
   }
 
-  public static addPlayer(sync: any, socket: any): void {
+  public static addPlayer(user: User): void {
+    const pushPlayer = ((user): any => {
+      return (): void => {
+        const [direction, point] = Board.getRandomPointAndDirection()
+        const player = new Snake(point, user)
+        player.direction = direction
+        Game.players.push(player)
+      }
+    })(user)
+    if (!Game.players.find((p: Snake) => p.token === user.token)) {
+      if (!Game.isReady) {
+        Game.readyHooks.push(pushPlayer)
+      } else {
+        pushPlayer()
+      }
+    }
+  }
+
+  public static syncStart(sync: any, socket: any): void {
     if (!Game.syncChannel) {
       Game.syncChannel = sync
       Game.init()
       Game.start()
     }
-    const player = new Snake(new Position(0, 0))
-    player.direction = Direction.RIGHT
-    // if (!Game.players.find((p) => p.name === player.name)) {
-    Game.players.push(player)
-    // }
   }
 
   public static onClockTick(callback: Function): () => void {
@@ -103,7 +124,7 @@ export default class Game {
 
 // sync very 66ms, 15/second
 function throttle(handle: Function): (data: any) => void {
-  const interval = 2000
+  const interval = 66
   let lastSyncAt = Date.now()
   return (data: any): void => {
     const now = Date.now()

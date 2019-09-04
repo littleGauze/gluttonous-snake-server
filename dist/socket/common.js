@@ -39,17 +39,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = (function (io) {
     var common = io.of('/common');
     common.on('connection', function (socket) {
-        console.log(socket.id + " common connected --- ", socket.handshake);
-        socket.emit('chat', 'hello there...');
         socket.on('authentication', function (_a, callback) {
             var name = _a.name;
             return __awaiter(_this, void 0, void 0, function () {
                 var user;
                 return __generator(this, function (_b) {
                     switch (_b.label) {
-                        case 0:
-                            console.log('authentication ==== ', name);
-                            return [4 /*yield*/, io.redisStore.setUser(name)];
+                        case 0: return [4 /*yield*/, io.redisStore.setUser(name)];
                         case 1:
                             user = _b.sent();
                             socket._user = user;
@@ -58,9 +54,6 @@ exports.default = (function (io) {
                     }
                 });
             });
-        });
-        socket.on('chat', function (msg) {
-            console.log('server got msg ====> ', msg);
         });
     });
     return common;

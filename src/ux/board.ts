@@ -1,4 +1,4 @@
-import { Drawable, Position } from '../types/index'
+import { Drawable, Position, Direction } from '../types/index'
 
 const width = 600
 const height = 400
@@ -71,5 +71,28 @@ export default class Board {
       }
     }
     return data
+  }
+
+  public static getRandomPointAndDirection(): [Direction, Position] {
+    const direction = [Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT]
+    const dir = Math.floor(Math.random() * direction.length)
+
+    let point
+    switch (dir) {
+      case Direction.UP:
+        point = new Position(Math.floor(Math.random() * Board.width), Board.height)
+        break
+      case Direction.DOWN:
+        point = new Position(Math.floor(Math.random() * Board.width), 0)
+        break
+      case Direction.LEFT:
+        point = new Position(Board.width, Math.floor(Math.random() * Board.height))
+        break
+      case Direction.RIGHT:
+        point = new Position(0, Math.floor(Math.random() * Board.height))
+        break
+    }
+
+    return [dir, point]
   }
 }

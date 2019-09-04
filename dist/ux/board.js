@@ -58,6 +58,26 @@ var Board = /** @class */ (function () {
         }
         return data;
     };
+    Board.getRandomPointAndDirection = function () {
+        var direction = [index_1.Direction.UP, index_1.Direction.DOWN, index_1.Direction.LEFT, index_1.Direction.RIGHT];
+        var dir = Math.floor(Math.random() * direction.length);
+        var point;
+        switch (dir) {
+            case index_1.Direction.UP:
+                point = new index_1.Position(Math.floor(Math.random() * Board.width), Board.height);
+                break;
+            case index_1.Direction.DOWN:
+                point = new index_1.Position(Math.floor(Math.random() * Board.width), 0);
+                break;
+            case index_1.Direction.LEFT:
+                point = new index_1.Position(Board.width, Math.floor(Math.random() * Board.height));
+                break;
+            case index_1.Direction.RIGHT:
+                point = new index_1.Position(0, Math.floor(Math.random() * Board.height));
+                break;
+        }
+        return [dir, point];
+    };
     Board.bgColor = '#fff';
     Board.gridColor = '#001F5C';
     Board.blockSize = 8;

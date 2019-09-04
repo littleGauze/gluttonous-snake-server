@@ -19,7 +19,7 @@ var index_1 = require("../ux/index");
 var index_2 = require("../types/index");
 var Snake = /** @class */ (function (_super) {
     __extends(Snake, _super);
-    function Snake(position) {
+    function Snake(position, user) {
         var _this = _super.call(this, position) || this;
         _this.jumpDistance = 8;
         _this.skipNextTurn = false;
@@ -35,8 +35,8 @@ var Snake = /** @class */ (function (_super) {
         _this.segments[0] = _this;
         _this.isAlive = true;
         _this.clazz = 'Snake';
-        _this.name = 'nealli';
-        _this.id = '1234';
+        _this.name = user.name;
+        _this.token = user.token;
         index_1.Board.placeObject(_this, position);
         return _this;
     }
@@ -168,7 +168,7 @@ var Snake = /** @class */ (function (_super) {
     };
     Snake.prototype.toJSON = function () {
         return {
-            id: this.id,
+            token: this.token,
             clazz: this.clazz,
             name: this.name,
             colorIndex: this.colorIndex,

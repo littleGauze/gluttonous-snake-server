@@ -8,7 +8,8 @@ import {
   ScreenEdge,
   ClockTick,
   PlayerObject,
-  GameObject
+  GameObject,
+  User
 } from '../types/index'
 
 export default class Snake extends SnakeSegment implements PlayerObject {
@@ -27,19 +28,19 @@ export default class Snake extends SnakeSegment implements PlayerObject {
   public points: number = 0
   public lives: number = 999
 
-  public id: string
+  public token: string
   public name: string
   public clazz: string
   public segments: SnakeSegment[] = []
   public maxLength: number = Snake.defaultLength
 
-  constructor(position: Position) {
+  constructor(position: Position, user: User) {
     super(position)
     this.segments[0] = this
     this.isAlive = true
     this.clazz = 'Snake'
-    this.name = 'nealli'
-    this.id = '1234'
+    this.name = user.name
+    this.token = user.token
 
     Board.placeObject(this, position)
   }
@@ -187,7 +188,7 @@ export default class Snake extends SnakeSegment implements PlayerObject {
 
   public toJSON(): object {
     return {
-      id: this.id,
+      token: this.token,
       clazz: this.clazz,
       name: this.name,
       colorIndex: this.colorIndex,

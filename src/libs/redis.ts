@@ -1,13 +1,8 @@
 import shortid = require('shortid')
+import { User, TokenInfo } from '../types/index'
 
-const EXPIRES = 3600 * 2
-interface TokenInfo {
-  token: string
-  expires: number
-}
-interface User extends TokenInfo {
-  name: string
-}
+const EXPIRES = 3600 * 24
+
 interface StoreApi {
   findUserByToken: (token: string) => Promise<User|null>
   setUser: (name: string) => Promise<User>

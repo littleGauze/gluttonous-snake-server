@@ -24,13 +24,9 @@ export default (server: any, Game: any): void => {
   // io.adapter(redisAdapter)
   redis(io, { store: store(cfg) })
 
-  // io.on('connection', (socket: any): void => {
-  //   // console.log(`${socket.id} connected --- `, socket.handshake)
-  // })
-
   const commonChannel = common(io)
   sync(io, (syncChannel: any, socket: any) => {
-    Game.addPlayer(syncChannel, socket)
+    Game.syncStart(syncChannel, socket)
   })
 
   const usersChannel = users(io, commonChannel)

@@ -21,6 +21,11 @@ var Game = /** @class */ (function () {
             Game.syncChannel && Game.syncChannel.emit('turn', { data: data });
         });
         Game.clock = new index_1.Timer(GameDifficulty.DIFFICULT, 0, Game.onClockTick(dataCallback));
+        Game.isReady = true;
+        Game.onReady();
+    };
+    Game.onReady = function () {
+        Game.readyHooks.forEach(function (fn) { return fn(); });
     };
     Game.start = function () {
         if (Game.isRunning)
@@ -46,17 +51,30 @@ var Game = /** @class */ (function () {
         Game.isRunning = false;
         Game.ready();
     };
-    Game.addPlayer = function (sync, socket) {
+    Game.addPlayer = function (user) {
+        var pushPlayer = (function (user) {
+            return function () {
+                var _a = index_3.Board.getRandomPointAndDirection(), direction = _a[0], point = _a[1];
+                var player = new index_2.Snake(point, user);
+                player.direction = direction;
+                Game.players.push(player);
+            };
+        })(user);
+        if (!Game.players.find(function (p) { return p.token === user.token; })) {
+            if (!Game.isReady) {
+                Game.readyHooks.push(pushPlayer);
+            }
+            else {
+                pushPlayer();
+            }
+        }
+    };
+    Game.syncStart = function (sync, socket) {
         if (!Game.syncChannel) {
             Game.syncChannel = sync;
             Game.init();
             Game.start();
         }
-        var player = new index_2.Snake(new index_1.Position(0, 0));
-        player.direction = index_1.Direction.RIGHT;
-        // if (!Game.players.find((p) => p.name === player.name)) {
-        Game.players.push(player);
-        // }
     };
     Game.onClockTick = function (callback) {
         return function () {
@@ -94,12 +112,14 @@ var Game = /** @class */ (function () {
     Game.hiScore = 0;
     Game.isRunning = false;
     Game.coinCounter = 0;
+    Game.isReady = false;
+    Game.readyHooks = [];
     return Game;
 }());
 exports.default = Game;
 // sync very 66ms, 15/second
 function throttle(handle) {
-    var interval = 2000;
+    var interval = 66;
     var lastSyncAt = Date.now();
     return function (data) {
         var now = Date.now();

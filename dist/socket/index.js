@@ -21,12 +21,9 @@ exports.default = (function (server, Game) {
     });
     // io.adapter(redisAdapter)
     redis_1.default(io, { store: store_1.default(cfg) });
-    // io.on('connection', (socket: any): void => {
-    //   // console.log(`${socket.id} connected --- `, socket.handshake)
-    // })
     var commonChannel = common_1.default(io);
     sync_1.default(io, function (syncChannel, socket) {
-        Game.addPlayer(syncChannel, socket);
+        Game.syncStart(syncChannel, socket);
     });
     var usersChannel = users_1.default(io, commonChannel);
     usersChannel.use(auth_1.default(io));

@@ -47,7 +47,7 @@ var __rest = (this && this.__rest) || function (s, e) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var shortid = require("shortid");
-var EXPIRES = 3600 * 2;
+var EXPIRES = 3600 * 24;
 exports.default = (function (io, _a) {
     var store = _a.store, opts = __rest(_a, ["store"]);
     var key = opts.key || 'snake:';
