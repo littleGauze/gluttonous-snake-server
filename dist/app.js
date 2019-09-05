@@ -63,6 +63,7 @@ app.use(koaBodyparser());
 var server = http.createServer(app.callback());
 socket_1.default(server, game_1.default);
 app.use(cors({
+    credentials: true,
     origin: true
 }));
 router.get('/user', function (ctx, next) { return __awaiter(_this, void 0, void 0, function () {

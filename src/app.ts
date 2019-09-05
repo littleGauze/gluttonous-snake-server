@@ -30,6 +30,7 @@ const server = http.createServer(app.callback())
 SocketIo(server, Game)
 
 app.use(cors({
+  credentials: true,
   origin: true
 }))
 
