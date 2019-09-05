@@ -79,6 +79,12 @@ export default class Game {
     }
   }
 
+  public static removePlayer(token: string): void {
+    const player = Game.players.find((p: Snake) => p.token === token)
+    Game.players = Game.players.filter((p: Snake) => p !== player)
+    player && player.remove()
+  }
+
   public static syncStart(sync: any, socket: any): void {
     if (!Game.syncChannel) {
       Game.syncChannel = sync

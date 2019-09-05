@@ -1,7 +1,7 @@
 import shortid = require('shortid')
 import { User, TokenInfo } from '../types/index'
 
-const EXPIRES = 3600 * 24
+const EXPIRES = 60 * 5
 
 interface StoreApi {
   findUserByToken: (token: string) => Promise<User|null>
@@ -26,6 +26,11 @@ export default (io: any, { store, ...opts }: any): StoreApi => {
       const user = { name, token, expires }
       await store.set(sid, JSON.stringify(user), expires)
       return user
+    },
+
+    async updateUser(user: User): Promise<void> {
+      const sid = `${key}${prefix}${user.token}`
+      await store.set(sid, JSON.stringify(user), EXPIRES, 'XX')
     },
 
     async deleteUserByToken(token: string): Promise<boolean> {

@@ -69,6 +69,11 @@ var Game = /** @class */ (function () {
             }
         }
     };
+    Game.removePlayer = function (token) {
+        var player = Game.players.find(function (p) { return p.token === token; });
+        Game.players = Game.players.filter(function (p) { return p !== player; });
+        player && player.remove();
+    };
     Game.syncStart = function (sync, socket) {
         if (!Game.syncChannel) {
             Game.syncChannel = sync;

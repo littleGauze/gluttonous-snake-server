@@ -80,7 +80,7 @@ router.post('/auth', function (ctx, next) { return __awaiter(_this, void 0, void
     });
 }); });
 app.use(router.routes());
-server.listen(3001, function () {
-    console.log('Server running on port 3000');
+server.listen(8082, function () {
+    console.log('Server running on port 8082');
 });
 //# sourceMappingURL=app.js.map

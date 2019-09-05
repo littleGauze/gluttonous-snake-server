@@ -14,6 +14,8 @@ export default (io: any): any => async (socket: any, next: any): Promise<void> =
       next()
       return
     }
+    io.of('/common').emit('logout', { token })
+    Game.removePlayer(token)
   }
   next(new Error('user unauthorize!!!'))
 }

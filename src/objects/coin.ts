@@ -22,12 +22,12 @@ export default class Coin implements GameObject {
   }
 
   public static createRandom(): Coin {
-    return new Coin(Coin.values[Math.floor(Math.random() * Coin.values.length)])
+    return new Coin(1)
   }
 
   public handleCollision(snake: Snake): void {
     snake.points += this.value
-    snake.maxLength += 2
+    snake.maxLength += 1
     this.destroy()
   }
 

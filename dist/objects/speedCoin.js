@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+var index_1 = require("../types/index");
 var SpeedCoin = /** @class */ (function () {
     function SpeedCoin(speed) {
         this.clazz = 'SpeedCoin';
@@ -11,6 +12,14 @@ var SpeedCoin = /** @class */ (function () {
     }
     SpeedCoin.prototype.handleCollision = function (snake) {
         snake.setSpeed(this.speed);
+        if (this.speed === index_1.Speed.FAST) {
+            snake.points += 3;
+            snake.maxLength += 3;
+        }
+        else {
+            snake.points += 1;
+            snake.maxLength += 1;
+        }
         this.destroy();
     };
     SpeedCoin.prototype.destroy = function () {

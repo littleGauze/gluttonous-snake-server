@@ -12,8 +12,8 @@ export default (cfg: any): object => {
       return JSON.parse(res)
     },
 
-    async set(sid: string, session: string, ttl?: number): Promise<boolean> {
-      const res = await promisify(redis.set.bind(redis))(sid, session, 'EX', ttl)
+    async set(sid: string, session: string, ttl?: number, mode: string = 'NX'): Promise<boolean> {
+      const res = await promisify(redis.set.bind(redis))(sid, session, 'EX', ttl, mode)
       return !!res
     },
 

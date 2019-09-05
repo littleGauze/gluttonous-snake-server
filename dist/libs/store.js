@@ -55,12 +55,13 @@ exports.default = (function (cfg) {
                 });
             });
         },
-        set: function (sid, session, ttl) {
+        set: function (sid, session, ttl, mode) {
+            if (mode === void 0) { mode = 'NX'; }
             return __awaiter(this, void 0, void 0, function () {
                 var res;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
-                        case 0: return [4 /*yield*/, promisify(redis.set.bind(redis))(sid, session, 'EX', ttl)];
+                        case 0: return [4 /*yield*/, promisify(redis.set.bind(redis))(sid, session, 'EX', ttl, mode)];
                         case 1:
                             res = _a.sent();
                             return [2 /*return*/, !!res];

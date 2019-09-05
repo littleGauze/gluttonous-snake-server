@@ -10,11 +10,11 @@ var Coin = /** @class */ (function () {
         ++Coin.coinsActive;
     }
     Coin.createRandom = function () {
-        return new Coin(Coin.values[Math.floor(Math.random() * Coin.values.length)]);
+        return new Coin(1);
     };
     Coin.prototype.handleCollision = function (snake) {
         snake.points += this.value;
-        snake.maxLength += 2;
+        snake.maxLength += 1;
         this.destroy();
     };
     Coin.prototype.destroy = function () {

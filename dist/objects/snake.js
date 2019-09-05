@@ -21,7 +21,7 @@ var Snake = /** @class */ (function (_super) {
     __extends(Snake, _super);
     function Snake(position, user) {
         var _this = _super.call(this, position) || this;
-        _this.jumpDistance = 8;
+        _this.jumpDistance = 3;
         _this.skipNextTurn = false;
         _this.hitDetected = false;
         _this.isAlive = false;
@@ -73,11 +73,6 @@ var Snake = /** @class */ (function (_super) {
         this.hitDetected = true;
         this.hiScore = this.points > this.hiScore ? this.points : this.hiScore;
         game_1.default.hiScore = this.hiScore > game_1.default.hiScore ? this.hiScore : game_1.default.hiScore;
-        if (!this.lives) {
-            this.isAlive = false;
-            game_1.default.reset();
-            return;
-        }
         --this.lives;
         this.destroy();
         this.position = new index_2.Position(0, 0);
@@ -165,6 +160,10 @@ var Snake = /** @class */ (function (_super) {
         }
         this.segments = [this];
         this.maxLength = Snake.defaultLength;
+        this.points = 0;
+    };
+    Snake.prototype.remove = function () {
+        index_1.Board.removeObjectAt(this.position);
     };
     Snake.prototype.toJSON = function () {
         return {
@@ -176,7 +175,8 @@ var Snake = /** @class */ (function (_super) {
             isAlive: this.isAlive,
             speed: this.speed,
             direction: this.direction,
-            segments: this.segments.slice(1).map(function (seg) { return seg.toJSON(); })
+            segments: this.segments.slice(1).map(function (seg) { return seg.toJSON(); }),
+            points: this.points
         };
     };
     Snake.defaultLength = 3;

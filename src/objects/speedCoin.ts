@@ -25,6 +25,13 @@ export default class SpeedCoin implements GameObject {
 
   public handleCollision(snake: Snake): void {
     snake.setSpeed(this.speed)
+    if (this.speed === Speed.FAST) {
+      snake.points += 3
+      snake.maxLength += 3
+    } else {
+      snake.points += 1
+      snake.maxLength += 1
+    }
     this.destroy()
   }
 

@@ -47,7 +47,7 @@ var __rest = (this && this.__rest) || function (s, e) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var shortid = require("shortid");
-var EXPIRES = 3600 * 24;
+var EXPIRES = 60 * 5;
 exports.default = (function (io, _a) {
     var store = _a.store, opts = __rest(_a, ["store"]);
     var key = opts.key || 'snake:';
@@ -81,6 +81,21 @@ exports.default = (function (io, _a) {
                         case 1:
                             _b.sent();
                             return [2 /*return*/, user];
+                    }
+                });
+            });
+        },
+        updateUser: function (user) {
+            return __awaiter(this, void 0, void 0, function () {
+                var sid;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0:
+                            sid = "" + key + prefix + user.token;
+                            return [4 /*yield*/, store.set(sid, JSON.stringify(user), EXPIRES, 'XX')];
+                        case 1:
+                            _a.sent();
+                            return [2 /*return*/];
                     }
                 });
             });

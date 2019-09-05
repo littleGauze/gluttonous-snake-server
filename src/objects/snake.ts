@@ -14,7 +14,7 @@ import {
 
 export default class Snake extends SnakeSegment implements PlayerObject {
   public static defaultLength = 3
-  public jumpDistance: number = 8
+  public jumpDistance: number = 3
 
   public skipNextTurn: boolean = false
   public hitDetected: boolean = false
@@ -82,12 +82,6 @@ export default class Snake extends SnakeSegment implements PlayerObject {
     this.hitDetected = true
     this.hiScore = this.points > this.hiScore ? this.points : this.hiScore
     Game.hiScore = this.hiScore > Game.hiScore ? this.hiScore : Game.hiScore
-
-    if (!this.lives) {
-      this.isAlive = false
-      Game.reset()
-      return
-    }
 
     --this.lives
     this.destroy()
@@ -184,6 +178,11 @@ export default class Snake extends SnakeSegment implements PlayerObject {
 
     this.segments = [this]
     this.maxLength = Snake.defaultLength
+    this.points = 0
+  }
+
+  public remove(): void {
+    Board.removeObjectAt(this.position)
   }
 
   public toJSON(): object {
@@ -196,7 +195,8 @@ export default class Snake extends SnakeSegment implements PlayerObject {
       isAlive: this.isAlive,
       speed: this.speed,
       direction: this.direction,
-      segments: this.segments.slice(1).map((seg) => seg.toJSON())
+      segments: this.segments.slice(1).map((seg) => seg.toJSON()),
+      points: this.points
     }
   }
 }

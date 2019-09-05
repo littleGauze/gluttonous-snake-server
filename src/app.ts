@@ -44,6 +44,6 @@ router.post('/auth', async (ctx, next) => {
 
 app.use(router.routes())
 
-server.listen(3001, () => {
-  console.log('Server running on port 3000')
+server.listen(8082, () => {
+  console.log('Server running on port 8082')
 })

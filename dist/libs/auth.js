@@ -55,6 +55,8 @@ exports.default = (function (io) { return function (socket, next) { return __awa
                     next();
                     return [2 /*return*/];
                 }
+                io.of('/common').emit('logout', { token: token });
+                game_1.default.removePlayer(token);
                 _a.label = 2;
             case 2:
                 next(new Error('user unauthorize!!!'));
