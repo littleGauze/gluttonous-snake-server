@@ -25,13 +25,12 @@ const sessionOpt = {
 }
 app.use(session(sessionOpt))
 app.use(koaBodyparser())
+app.use(cors({
+  origin: '*'
+}))
 
 const server = http.createServer(app.callback())
 SocketIo(server, Game)
-
-app.use(cors({
-  origin: true
-}))
 
 router.get('/user', async (ctx, next) => {
   ctx.body = ctx.session.user

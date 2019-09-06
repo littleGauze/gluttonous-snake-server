@@ -60,11 +60,11 @@ var sessionOpt = {
 };
 app.use(session(sessionOpt));
 app.use(koaBodyparser());
+app.use(cors({
+    origin: '*'
+}));
 var server = http.createServer(app.callback());
 socket_1.default(server, game_1.default);
-app.use(cors({
-    origin: true
-}));
 router.get('/user', function (ctx, next) { return __awaiter(_this, void 0, void 0, function () {
     return __generator(this, function (_a) {
         ctx.body = ctx.session.user;

@@ -17,7 +17,15 @@ exports.default = (function (server, Game) {
     });
     var io = SocketIo(server, {
         transports: ['websocket', 'polling'],
-        origins: ['http://localhost:8080', 'https://littlegauze.github.io/', 'http://snake.gauze.life']
+        origins: [
+            'http://localhost:8080',
+            'https://littlegauze.github.io/',
+            'http://snake.gauze.life',
+            'http://snake',
+            'http://gauze.life:8081',
+            'http://gaze.life:*',
+            'http://localhost:*'
+        ]
     });
     // io.adapter(redisAdapter)
     redis_1.default(io, { store: store_1.default(cfg) });
