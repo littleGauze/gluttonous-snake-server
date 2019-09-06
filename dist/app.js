@@ -61,7 +61,8 @@ var sessionOpt = {
 app.use(session(sessionOpt));
 app.use(koaBodyparser());
 app.use(cors({
-    origin: '*'
+    credentials: true,
+    origin: true
 }));
 var server = http.createServer(app.callback());
 socket_1.default(server, game_1.default);

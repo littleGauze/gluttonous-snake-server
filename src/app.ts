@@ -32,6 +32,11 @@ app.use(cors({
 const server = http.createServer(app.callback())
 SocketIo(server, Game)
 
+app.use(cors({
+  credentials: true,
+  origin: true
+}))
+
 router.get('/user', async (ctx, next) => {
   ctx.body = ctx.session.user
 })
